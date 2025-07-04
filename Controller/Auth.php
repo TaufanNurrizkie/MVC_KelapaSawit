@@ -44,7 +44,7 @@ class Auth
                 if ($user['role'] === 'admin') {
                     header('Location: ./index.php?action=area');
                 } else {
-                    header('Location: ./View/jadwal/index.php');
+                    header('Location: ./index.php?action=jadwal-terbuka');
                 }
                 exit;
             } else {

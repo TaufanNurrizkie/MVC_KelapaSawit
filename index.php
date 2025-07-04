@@ -1,8 +1,19 @@
 <?php
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once './Controller/Auth.php';
 require_once './Controller/areaKerja.php';
 require_once './Controller/jadwalKerja.php';
+require_once './Controller/tugasKerja.php';
+require_once './Controller/seleksiPenempatan.php';
+require_once './Controller/karyawan.php';
 
+$karyawan = new Karyawan();
+$seleksi = new SeleksiPenempatan();
+$tugas = new TugasKerja();
 $jadwal = new JadwalKerja();
 $auth = new Auth();
 $area = new AreaKerja();
@@ -48,6 +59,41 @@ if (isset($_GET['action'])) {
             break;
         case 'jadwal-delete':
             $jadwal->delete($_GET['id']);
+            break;
+
+        // === TUGAS KERJA ROUTES ===
+        case 'tugas':
+            $tugas->index();
+            break;
+        case 'tugas-create':
+            $tugas->create();
+            break;
+
+        // === Seleksi tugas ===
+        case 'seleksi':
+            $seleksi->index();
+            break;
+        case 'seleksi-accept':
+            $seleksi->updateStatus($_GET['id'], 'accepted');
+            break;
+        case 'seleksi-reject':
+            $seleksi->updateStatus($_GET['id'], 'rejected');
+            break;
+        case 'apply':
+            $seleksi->apply($_GET['schedule_id']);
+            break;
+
+        // === Jadwal Saya (karyawan)===
+        case 'jadwal-saya':
+            $tugas->jadwalSaya();
+            break;
+        case 'jadwal-terbuka':
+            $jadwal->daftarUntukKaryawan();
+            break;
+
+        // ===  Karyawan (admin) ===  
+        case 'karyawan':
+            $karyawan->index();
             break;
 
         // === DEFAULT: Aksi tidak dikenali ===

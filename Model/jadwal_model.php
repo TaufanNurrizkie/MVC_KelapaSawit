@@ -63,4 +63,15 @@ class jadwal_kerja
         $this->db->query("SELECT * FROM areas");
         return $this->db->resultSet();
     }
+
+    public function getPublished()
+{
+    $this->db->query("SELECT s.*, a.name AS area_name 
+                      FROM schedules s 
+                      JOIN areas a ON s.area_id = a.id 
+                      WHERE s.is_published = 1 
+                      ORDER BY s.start_day ASC");
+    return $this->db->resultSet();
+}
+
 }

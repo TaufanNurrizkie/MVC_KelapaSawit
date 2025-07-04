@@ -65,4 +65,11 @@ class JadwalKerja
         header("Location: index.php?action=jadwal");
         exit;
     }
+
+    public function daftarUntukKaryawan()
+{
+    $jadwalTersedia = $this->model->getPublished();
+    include './View/Jadwal_Kerja/available.php';
+}
+
 }

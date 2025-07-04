@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,11 +26,9 @@
 
         #sidebar {
             width: 280px;
-            height: 100%;
             background: linear-gradient(135deg, #15803d 0%, #22c55e 50%, #065f46 100%);
             color: white;
-            display: flex;
-            flex-direction: column;
+            padding: 0;
             position: relative;
             box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
@@ -44,7 +41,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
             pointer-events: none;
         }
 
@@ -76,30 +73,8 @@
             font-weight: 400;
         }
 
-
         .sidebar-nav {
-            flex-grow: 1;
-            overflow-y: auto;
             padding: 20px 0;
-        }
-
-        /* Custom scrollbar for sidebar-nav */
-        .sidebar-nav::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sidebar-nav::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        .sidebar-nav::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #22c55e, #15803d);
-            border-radius: 4px;
-        }
-
-        .sidebar-nav::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #16a34a, #065f46);
         }
 
         .nav-section {
@@ -141,7 +116,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
             opacity: 0;
             transition: opacity 0.3s ease;
             border-radius: 10px;
@@ -181,7 +156,10 @@
         }
 
         .sidebar-footer {
-            flex-shrink: 0;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
             padding: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(0, 0, 0, 0.1);
@@ -289,103 +267,74 @@
         }
     </style>
 </head>
-
-<body>
-    <div class="wrapper">
-        <aside id="sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-title">
-                    <i class="fas fa-cogs"></i>
-                    Admin Panel
-                </div>
-                <div class="sidebar-subtitle">Management System</div>
-            </div>
-
-            <nav class="sidebar-nav">
-                <div class="nav-section">
-                    <div class="nav-section-title">Dashboard</div>
-                    <div class="nav-item">
-                        <a href="index.php?action=dashboard" class="nav-link">
-                            <i class="fas fa-home"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-section-title">Manajemen</div>
-                    <div class="nav-item">
-                        <a href="index.php?action=area" class="nav-link active">
-                            <i class="fas fa-map-marked-alt"></i>
-                            <span>Daftar Area</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="index.php?action=jadwal" class="nav-link">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>Jadwal Kerja</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="index.php?action=karyawan" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>Karyawan</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="index.php?action=seleksi" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>Seleksi_Penempatan</span>
-                        </a>
-                    <div class="nav-item">
-                        <a href="index.php?action=tugas" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>Penugasan</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="index.php?action=laporan" class="nav-link">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>Laporan</span>
-                        </a>
-                    </div>
-                </div>
-            </nav>
-
-            <div class="sidebar-footer">
-                <div class="user-info">
-                    <div class="user-avatar">
-                        A
-                    </div>
-                    <div class="user-details">
-                        <h6>Admin User</h6>
-                        <small>Administrator</small>
-                    </div>
-                </div>
-                <a href="index.php?action=logout" id="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </a>
-            </div>
-        </aside>
+<aside id="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-title">
+            <i class="fas fa-user-hard-hat"></i>
+            Karyawan Panel
+        </div>
+        <div class="sidebar-subtitle">Sistem Perkebunan</div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const currentPage = new URLSearchParams(window.location.search).get('action') || 'dashboard';
+    <nav class="sidebar-nav">
+        <div class="nav-section">
+            <div class="nav-section-title">Menu Utama</div>
+            <div class="nav-item">
+                <a href="index.php?action=jadwal-terbuka" class="nav-link">
+                    <i class="fas fa-calendar-plus"></i>
+                    <span>Jadwal Tersedia</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="index.php?action=jadwal-saya" class="nav-link">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Jadwal Saya</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="index.php?action=pengajuan-saya" class="nav-link">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Status Pengajuan</span>
+                </a>
+            </div>
+        </div>
+    </nav>
 
-            navLinks.forEach(link => {
-                const linkAction = new URL(link.href).searchParams.get('action');
-                if (linkAction === currentPage) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
-                }
-            });
+    <div class="sidebar-footer">
+        <div class="user-info">
+            <div class="user-avatar">K</div>
+            <div class="user-details">
+                <h6><?= $_SESSION['user']['name'] ?? 'Karyawan' ?></h6>
+                <small>Karyawan Aktif</small>
+            </div>
+        </div>
+        <a href="index.php?action=logout" id="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</aside>
+
+<!-- Include style dan script seperti di sidebar admin -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    /* ambil semua style sidebar dari versi admin yang kamu kirim, bisa copy-paste langsung */
+    <?php include __DIR__ . '/sidebar-style.css'; ?>
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('.nav-link');
+        const currentAction = new URLSearchParams(window.location.search).get('action');
+
+        navLinks.forEach(link => {
+            const action = new URL(link.href).searchParams.get('action');
+            if (action === currentAction) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
         });
-    </script>
-</body>
-
-</html>
+    });
+</script>
