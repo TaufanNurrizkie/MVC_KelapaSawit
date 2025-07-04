@@ -1,15 +1,20 @@
 <?php
 require_once './Model/user_model.php';
 
-class Auth {
+class Auth
+{
     private $model;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->model = new user_model();
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
-    public function register() {
+    public function register()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
                 'name' => $_POST['name'],
@@ -30,7 +35,8 @@ class Auth {
         include './View/Auth/register.php';
     }
 
-    public function login() {
+    public function login()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $this->model->login($_POST['username']);
             if ($user && password_verify($_POST['password'], $user['password'])) {
@@ -49,7 +55,8 @@ class Auth {
         include './View/Auth/login.php';
     }
 
-    public function logout() {
+    public function logout()
+    {
         session_destroy();
         header('Location: ?action=login');
     }

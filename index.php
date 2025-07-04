@@ -1,7 +1,9 @@
 <?php
 require_once './Controller/Auth.php';
 require_once './Controller/areaKerja.php';
+require_once './Controller/jadwalKerja.php';
 
+$jadwal = new JadwalKerja();
 $auth = new Auth();
 $area = new AreaKerja();
 
@@ -34,6 +36,19 @@ if (isset($_GET['action'])) {
             $area->delete($_GET['id']);
             break;
 
+        // === JADWAL KERJA ROUTES ===
+        case 'jadwal':
+            $jadwal->index();
+            break;
+        case 'jadwal-create':
+            $jadwal->create();
+            break;
+        case 'jadwal-edit':
+            $jadwal->edit($_GET['id']);
+            break;
+        case 'jadwal-delete':
+            $jadwal->delete($_GET['id']);
+            break;
 
         // === DEFAULT: Aksi tidak dikenali ===
         default:
