@@ -36,9 +36,9 @@ class Auth {
             if ($user && password_verify($_POST['password'], $user['password'])) {
                 $_SESSION['user'] = $user;
                 if ($user['role'] === 'admin') {
-                    header('Location: ./areaKerja/index.php');
+                    header('Location: ./index.php?action=area');
                 } else {
-                    header('Location: ./jadwal/index.php');
+                    header('Location: ./View/jadwal/index.php');
                 }
                 exit;
             } else {

@@ -1,0 +1,66 @@
+<?php
+require_once './Cores/Database7.php';
+
+class jadwal_kerja
+{
+    private $table = 'schedules';
+    private $db;
+
+    public function __construct()
+    {
+        $this->db = new Database7;
+    }
+
+    public function getAll()
+    {
+        $this->db->query("SELECT schedules.*, areas.name AS area_name FROM schedules JOIN areas ON schedules.area_id = areas.id");
+        return $this->db->resultSet();
+    }
+
+    public function findById($id)
+    {
+        $this->db->query("SELECT * FROM $this->table WHERE id = :id");
+        $this->db->bind('id', $id);
+        return $this->db->single();
+    }
+
+    public function create($data)
+    {
+        $this->db->query("INSERT INTO $this->table (area_id, start_day, finish_day, is_published, description, status)
+                          VALUES (:area_id, :start_day, :finish_day, :is_published, :description, :status)");
+        $this->db->bind('area_id', $data['area_id']);
+        $this->db->bind('start_day', $data['start_day']);
+        $this->db->bind('finish_day', $data['finish_day']);
+        $this->db->bind('is_published', $data['is_published']);
+        $this->db->bind('description', $data['description']);
+        $this->db->bind('status', $data['status']);
+        return $this->db->execute();
+    }
+
+    public function update($data)
+    {
+        $this->db->query("UPDATE $this->table SET area_id = :area_id, start_day = :start_day, finish_day = :finish_day, 
+                          is_published = :is_published, description = :description, status = :status WHERE id = :id");
+        $this->db->bind('id', $data['id']);
+        $this->db->bind('area_id', $data['area_id']);
+        $this->db->bind('start_day', $data['start_day']);
+        $this->db->bind('finish_day', $data['finish_day']);
+        $this->db->bind('is_published', $data['is_published']);
+        $this->db->bind('description', $data['description']);
+        $this->db->bind('status', $data['status']);
+        return $this->db->execute();
+    }
+
+    public function delete($id)
+    {
+        $this->db->query("DELETE FROM $this->table WHERE id = :id");
+        $this->db->bind('id', $id);
+        return $this->db->execute();
+    }
+
+    public function getAllAreas()
+    {
+        $this->db->query("SELECT * FROM areas");
+        return $this->db->resultSet();
+    }
+}

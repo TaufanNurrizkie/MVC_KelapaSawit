@@ -29,6 +29,18 @@
         .text-link {
             color: #4CAF50;
         }
+
+        /* Tersembunyi tapi tetap dikirim */
+        .hidden-availability {
+            visibility: hidden;
+            height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+        .visible-availability {
+            visibility: visible;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -63,10 +75,29 @@
                     <option value="karyawan">Karyawan</option>
                 </select>
             </div>
-            <div class="mb-3" id="availability-box" style="display: none;">
+            <div class="mb-3 hidden-availability" id="availability-box">
                 <label class="form-label">Waktu Ketersediaan (Karyawan)</label>
-                <textarea name="availability_time" class="form-control" placeholder="Contoh: Senin - Jumat, 08.00 - 16.00"></textarea>
+                <textarea name="availability_time" class="form-control"
+                          placeholder="Contoh: Senin - Jumat, 08.00 - 16.00"></textarea>
             </div>
             <button type="submit" class="btn btn-green w-100">Daftar</button>
         </form>
         <div class="mt-3 text-center">
+            <small>Sudah punya akun? <a class="text-link" href="?action=login">Login di sini</a></small>
+        </div>
+    </div>
+
+    <script>
+        function toggleAvailability(role) {
+            const box = document.getElementById('availability-box');
+            if (role === 'karyawan') {
+                box.classList.remove('hidden-availability');
+                box.classList.add('visible-availability');
+            } else {
+                box.classList.add('hidden-availability');
+                box.classList.remove('visible-availability');
+            }
+        }
+    </script>
+</body>
+</html>
