@@ -44,13 +44,19 @@ class SeleksiPenempatan
     }
 
     // Karyawan: ajukan diri
-    public function apply($schedule_id)
+    public function apply()
     {
-        $user_id = $_SESSION['user']['id'] ?? null;
-        if ($user_id) {
-            $this->model->apply($user_id, $schedule_id);
+        if (!isset($_GET['schedule_id'])) {
+            die("Schedule ID is missing.");
         }
-        header('Location: index.php?action=jadwal');
+
+        $schedule_id = intval($_GET['schedule_id']);
+        $user_id = $_SESSION['user']['id'];
+
+        $model = new seleksi_penempatan();
+        $model->apply($user_id, $schedule_id);
+
+        header("Location: index.php?action=jadwal-terbuka");
         exit;
     }
 }

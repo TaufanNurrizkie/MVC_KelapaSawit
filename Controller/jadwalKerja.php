@@ -67,9 +67,45 @@ class JadwalKerja
     }
 
     public function daftarUntukKaryawan()
-{
-    $jadwalTersedia = $this->model->getPublished();
-    include './View/Jadwal_Kerja/available.php';
-}
+    {
+        $jadwalTersedia = $this->model->getPublished();
 
+        // Ambil semua schedule_id yang sudah diajukan user
+        $seleksiModel = new seleksi_penempatan();
+        $user_id = $_SESSION['user']['id'];
+        $appliedRows = $seleksiModel->getAppliedScheduleIds($user_id);
+
+        // Ubah ke array of integers
+        $appliedIds = array_map(
+            fn($row) => (int)$row['schedule_id'],
+            $appliedRows
+        );
+
+        include './View/Jadwal_Kerja/available.php';
+    }
+
+
+    public function apply()
+    {
+        $scheduleId = $_GET['schedule_id'] ?? null;
+        $userId = $_SESSION['user']['id'] ?? null;
+
+        if (!$scheduleId || !$userId) {
+            header("Location: index.php?action=jadwal-terbuka");
+            exit;
+        }
+
+        // cek apakah user sudah apply sebelumnya
+        if ($this->model->hasUserApplied($scheduleId, $userId)) {
+            // redirect kembali supaya tidak double apply
+            header("Location: index.php?action=jadwal-terbuka&info=already_applied");
+            exit;
+        }
+
+        // simpan apply
+        $this->model->applyUser($scheduleId, $userId);
+
+        header("Location: index.php?action=jadwal-terbuka&info=success");
+        exit;
+    }
 }

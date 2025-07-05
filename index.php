@@ -25,7 +25,6 @@ $user = new UserController();
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
-        // === AUTH ROUTES ===
         case 'login':
             $auth->login();
             break;
@@ -36,7 +35,7 @@ if (isset($_GET['action'])) {
             $auth->logout();
             break;
 
-        // === AREA KERJA ROUTES ===
+        // Area kerja
         case 'area':
             $area->index();
             break;
@@ -44,15 +43,13 @@ if (isset($_GET['action'])) {
             $area->create();
             break;
         case 'area-edit':
-            $area = new AreaKerja();
             $area->edit($_GET['id']);
             break;
         case 'area-delete':
-            $area = new AreaKerja();
             $area->delete($_GET['id']);
             break;
 
-        // === JADWAL KERJA ROUTES ===
+        // Jadwal kerja
         case 'jadwal':
             $jadwal->index();
             break;
@@ -66,7 +63,7 @@ if (isset($_GET['action'])) {
             $jadwal->delete($_GET['id']);
             break;
 
-        // === TUGAS KERJA ROUTES ===
+        // Tugas kerja
         case 'tugas':
             $tugas->index();
             break;
@@ -74,7 +71,7 @@ if (isset($_GET['action'])) {
             $tugas->create();
             break;
 
-        // === Seleksi tugas ===
+        // Seleksi tugas
         case 'seleksi':
             $seleksi->index();
             break;
@@ -88,33 +85,33 @@ if (isset($_GET['action'])) {
             $seleksi->apply($_GET['schedule_id']);
             break;
 
-        // === Jadwal Saya (karyawan)===
+        // Jadwal saya (karyawan)
         case 'jadwal-saya':
             $tugas->jadwalSaya();
             break;
         case 'jadwal-terbuka':
             $jadwal->daftarUntukKaryawan();
             break;
+        case 'apply-karyawan':
+            $jadwal->apply();
+            break;
 
-        // ===  Karyawan (admin) ===  
+        // Karyawan (admin)
         case 'karyawan':
             $karyawan->index();
             break;
 
-        // ===  Karyawan update profile === 
+        // Profil
         case 'profile':
             $user->index();
             break;
-
         case 'update-profile':
             $user->updateProfile();
             break;
 
-        // === DEFAULT: Aksi tidak dikenali ===
         default:
-            echo "<h3 style='color: red'>❌ Aksi tidak dikenali!</h3>";
+            echo "<h3 style='color:red'>❌ Aksi tidak dikenali!</h3>";
     }
 } else {
-    // DEFAULT: Arahkan ke login
     $auth->login();
 }

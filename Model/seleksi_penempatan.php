@@ -20,6 +20,15 @@ class seleksi_penempatan
                           ORDER BY a.created_at DESC");
         return $this->db->resultSet();
     }
+    
+    public function getAppliedScheduleIds($user_id)
+    {
+        $sql = "SELECT schedule_id FROM applications WHERE user_id = :user_id";
+        $this->db->query($sql);
+        $this->db->bind('user_id', $user_id);
+        return $this->db->resultSet();
+    }
+
 
     public function apply($userId, $scheduleId)
     {
