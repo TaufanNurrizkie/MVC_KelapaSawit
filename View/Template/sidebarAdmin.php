@@ -354,9 +354,11 @@
 
             <div class="sidebar-footer">
                 <div class="user-info">
+                    <a href="index.php?action=profile" style="text-decoration: none; color: inherit;">
                        <div class="user-avatar">
-                        <?= strtoupper(substr($_SESSION['user']['name'] ?? 'Admin', 0, 1)) ?>
-                    </div>
+                            <?= strtoupper(substr($_SESSION['user']['name'] ?? 'Admin', 0, 1)) ?>
+                        </div>
+                    </a>
                     <div class="user-details">
                         <h6><?= $_SESSION['user']['name'] ?? 'Admin' ?></h6>
                         <small>Administrator</small>

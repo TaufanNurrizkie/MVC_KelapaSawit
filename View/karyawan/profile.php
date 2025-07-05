@@ -1,6 +1,6 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
-if ($_SESSION['user']['role'] !== 'karyawan') {
+if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['karyawan', 'admin'])) {
     header("Location: index.php?action=login");
     exit;
 }
@@ -158,10 +158,12 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
                             <label class="form-label">Username</label>
                             <input type="text" name="username" class="form-control" placeholder="Username" value="<?= htmlspecialchars($user['username'] ?? '') ?>">
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Availability Time</label>
-                            <input type="text" name="availability_time" class="form-control" placeholder="Contoh: 08:00 - 16:00" value="<?= htmlspecialchars($user['availability_time'] ?? '') ?>">
-                        </div>
+                        <?php if ($_SESSION['user']['role'] !== 'admin'): ?>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Availability Time</label>
+                                <input type="text" name="availability_time" class="form-control" placeholder="Contoh: 08:00 - 16:00" value="<?= htmlspecialchars($user['availability_time'] ?? '') ?>">
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="mb-4">
                         <label class="form-label">Password (kosongkan jika tidak ingin mengubah)</label>
