@@ -354,11 +354,11 @@
 
             <div class="sidebar-footer">
                 <div class="user-info">
-                    <div class="user-avatar">
-                        A
+                       <div class="user-avatar">
+                        <?= strtoupper(substr($_SESSION['user']['name'] ?? 'Admin', 0, 1)) ?>
                     </div>
                     <div class="user-details">
-                        <h6>Admin User</h6>
+                        <h6><?= $_SESSION['user']['name'] ?? 'Admin' ?></h6>
                         <small>Administrator</small>
                     </div>
                 </div>

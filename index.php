@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -10,6 +13,7 @@ require_once './Controller/jadwalKerja.php';
 require_once './Controller/tugasKerja.php';
 require_once './Controller/seleksiPenempatan.php';
 require_once './Controller/karyawan.php';
+require_once './Controller/User.php';
 
 $karyawan = new Karyawan();
 $seleksi = new SeleksiPenempatan();
@@ -17,6 +21,7 @@ $tugas = new TugasKerja();
 $jadwal = new JadwalKerja();
 $auth = new Auth();
 $area = new AreaKerja();
+$user = new UserController();
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
@@ -94,6 +99,15 @@ if (isset($_GET['action'])) {
         // ===  Karyawan (admin) ===  
         case 'karyawan':
             $karyawan->index();
+            break;
+
+        // ===  Karyawan update profile === 
+        case 'profile':
+            $user->index();
+            break;
+
+        case 'update-profile':
+            $user->updateProfile();
             break;
 
         // === DEFAULT: Aksi tidak dikenali ===
