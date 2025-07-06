@@ -345,6 +345,12 @@
                             <span>Status Pengajuan</span>
                         </a>
                     </div>
+                    <div class="nav-item">
+                        <a href="index.php?action=gaji" class="nav-link">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Gaji</span>
+                        </a>
+                    </div>
                 </div>
             </nav>
 

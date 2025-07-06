@@ -1,9 +1,9 @@
 <?php
 class Database7 {
     private $host = 'localhost';
-    private $user = 'root';
-    private $pass = ''; // ganti kalau pakai password
-    private $dbname = 'project7'; // sesuaikan nama database kamu
+    private $user = 'laravel';
+    private $pass = 'passwordku'; // ganti kalau pakai password
+    private $dbname = 'kebun_sawit'; // sesuaikan nama database kamu
 
     private $dbh;
     private $stmt;

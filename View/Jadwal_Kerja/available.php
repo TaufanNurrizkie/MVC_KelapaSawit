@@ -8,7 +8,6 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <title>Jadwal Terbuka</title>
@@ -25,7 +24,6 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
             padding: 0;
             color: #fff;
         }
-
         .main-content {
             background: linear-gradient(135deg, #16a34a, #22c55e);
             backdrop-filter: blur(10px);
@@ -35,53 +33,43 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
             padding: 30px;
             margin: 30px;
         }
-
         h3 {
             color: #d1fae5;
             font-weight: 700;
             margin-bottom: 25px;
         }
-
         .table {
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
             border-radius: 8px;
             overflow: hidden;
         }
-
         .table th {
             background-color: rgba(22, 163, 74, 0.8);
             color: #fff;
             border-color: rgba(255, 255, 255, 0.3);
         }
-
         .table td {
             vertical-align: middle;
             border-color: rgba(255, 255, 255, 0.1);
         }
-
         .table-striped tbody tr:nth-of-type(odd) {
             background-color: rgba(255, 255, 255, 0.05);
         }
-
         .table-striped tbody tr:nth-of-type(even) {
             background-color: rgba(255, 255, 255, 0.1);
         }
-
         .text-muted {
             color: rgba(255, 255, 255, 0.6) !important;
         }
-
         .btn-primary {
             background-color: #16a34a;
             border-color: #15803d;
         }
-
         .btn-primary:hover {
             background-color: #15803d;
             border-color: #065f46;
         }
-
         .page-breadcrumb {
             margin: 30px;
             display: flex;
@@ -89,35 +77,29 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
             align-items: center;
             color: #fff;
         }
-
         .breadcrumb-title {
             font-weight: 600;
             font-size: 18px;
             color: rgb(25, 185, 73);
         }
-
         .breadcrumb {
             background: transparent;
             padding: 0;
             margin-bottom: 0;
         }
-
         .breadcrumb-item a {
             color: rgb(41, 158, 26);
             text-decoration: none;
         }
-
         .breadcrumb-item a:hover {
             text-decoration: underline;
         }
-
         .breadcrumb-item.active {
             color: #fff;
             font-weight: 600;
         }
     </style>
 </head>
-
 <body>
     <div class="wrapper d-flex">
         <?php include __DIR__ . '../../Template/sidebarKaryawan.php'; ?>
@@ -127,12 +109,8 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
                 <div class="breadcrumb-title pe-3">Dashboard</div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item">
-                            <a href="index.php?action=jadwal-saya">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            Jadwal Terbuka
-                        </li>
+                        <li class="breadcrumb-item"><a href="index.php?action=jadwal-saya">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Jadwal Terbuka</li>
                     </ol>
                 </nav>
             </div>
@@ -153,38 +131,39 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if (!empty($jadwalTersedia)): ?>
-                                <?php $no = 1;
-                                foreach ($jadwalTersedia as $j): ?>
-                                    <tr>
-                                        <td><?= $no++ ?></td>
-                                        <td><?= htmlspecialchars($j['area_name']) ?></td>
-                                        <td><?= htmlspecialchars($j['description']) ?></td>
-                                        <td><?= htmlspecialchars($j['start_day']) ?></td>
-                                        <td><?= htmlspecialchars($j['finish_day']) ?></td>
-                                        <td>
-                                            <button
-                                                type="button"
-                                                class="btn btn-outline-light btn-sm"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#detailModal"
-                                                data-id="<?= $j['id'] ?>"
-                                                data-area="<?= htmlspecialchars($j['area_name']) ?>"
-                                                data-description="<?= htmlspecialchars($j['description']) ?>"
-                                                data-start="<?= htmlspecialchars($j['start_day']) ?>"
-                                                data-finish="<?= htmlspecialchars($j['finish_day']) ?>">
-                                                <i class="fas fa-info-circle me-1"></i> Detail
-                                            </button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else: ?>
+                        <?php if (!empty($jadwalTersedia)): ?>
+                            <?php $no = 1;
+                            foreach ($jadwalTersedia as $j): ?>
                                 <tr>
-                                    <td colspan="6" class="text-center text-muted">
-                                        <i class="fas fa-info-circle me-2"></i> Belum ada jadwal tersedia.
+                                    <td><?= $no++ ?></td>
+                                    <td><?= htmlspecialchars($j['area_name']) ?></td>
+                                    <td><?= htmlspecialchars($j['description']) ?></td>
+                                    <td><?= htmlspecialchars($j['start_day']) ?></td>
+                                    <td><?= htmlspecialchars($j['finish_day']) ?></td>
+                                    <td>
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-light btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#detailModal"
+                                            data-id="<?= $j['id'] ?>"
+                                            data-area="<?= htmlspecialchars($j['area_name']) ?>"
+                                            data-description="<?= htmlspecialchars($j['description']) ?>"
+                                            data-start="<?= htmlspecialchars($j['start_day']) ?>"
+                                            data-finish="<?= htmlspecialchars($j['finish_day']) ?>"
+                                            data-status="<?= htmlspecialchars($j['status'] ?? '') ?>"> <!-- perubahan -->
+                                            <i class="fas fa-info-circle me-1"></i> Detail
+                                        </button>
                                     </td>
                                 </tr>
-                            <?php endif; ?>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">
+                                    <i class="fas fa-info-circle me-2"></i> Belum ada jadwal tersedia.
+                                </td>
+                            </tr>
+                        <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
@@ -207,9 +186,7 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
                     <p><strong>Selesai:</strong> <span id="modalFinish"></span></p>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" id="applyBtn" class="btn btn-primary">
-                        <i class="fas fa-paper-plane me-1"></i> Ajukan Diri
-                    </a>
+                    <div id="modalAction"></div> <!-- perubahan -->
                     <button type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
@@ -226,26 +203,38 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
             const description = button.getAttribute('data-description');
             const start = button.getAttribute('data-start');
             const finish = button.getAttribute('data-finish');
+            const status = button.getAttribute('data-status'); // perubahan
 
             document.getElementById('modalArea').textContent = area;
             document.getElementById('modalDescription').textContent = description;
             document.getElementById('modalStart').textContent = start;
             document.getElementById('modalFinish').textContent = finish;
 
-            const applyBtn = document.getElementById('applyBtn');
+            const modalAction = document.getElementById('modalAction');
+            modalAction.innerHTML = '';
+
             const applied = <?= json_encode($appliedIds ?? []); ?>;
 
-            if (applied.includes(id)) {
-                applyBtn.classList.add('disabled');
-                applyBtn.textContent = 'Sudah Diajukan';
-                applyBtn.removeAttribute('href');
+            if (status === 'diterima') {
+                modalAction.innerHTML = `
+                    <span class="badge bg-success">
+                        <i class="fas fa-check-circle me-1"></i> Diterima
+                    </span>
+                `;
+            } else if (applied.includes(id)) {
+                modalAction.innerHTML = `
+                    <span class="badge bg-warning text-dark">
+                        <i class="fas fa-hourglass-half me-1"></i> Sudah Diajukan
+                    </span>
+                `;
             } else {
-                applyBtn.classList.remove('disabled');
-                applyBtn.textContent = 'Ajukan Diri';
-                applyBtn.href = `index.php?action=apply&schedule_id=${id}`;
+                modalAction.innerHTML = `
+                    <a href="index.php?action=apply&schedule_id=${id}" class="btn btn-primary">
+                        <i class="fas fa-paper-plane me-1"></i> Ajukan Diri
+                    </a>
+                `;
             }
         });
     </script>
 </body>
-
 </html>

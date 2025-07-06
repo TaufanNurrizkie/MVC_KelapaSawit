@@ -20,7 +20,7 @@ class seleksi_penempatan
                           ORDER BY a.created_at DESC");
         return $this->db->resultSet();
     }
-    
+
     public function getAppliedScheduleIds($user_id)
     {
         $sql = "SELECT schedule_id FROM applications WHERE user_id = :user_id";
@@ -51,5 +51,28 @@ class seleksi_penempatan
         $this->db->query("SELECT * FROM $this->table WHERE id = :id");
         $this->db->bind('id', $id);
         return $this->db->single();
+    }
+
+    public function getPengajuanSaya($user_id)
+    {
+        $sql = "
+        SELECT 
+            a.id, 
+            a.schedule_id, 
+            a.status, 
+            j.start_day, 
+            j.finish_day, 
+            j.description, 
+            area.name AS area_name
+        FROM applications a
+        JOIN schedules j ON a.schedule_id = j.id
+        JOIN areas area ON j.area_id = area.id
+        WHERE a.user_id = :user_id
+        ORDER BY j.start_day DESC
+    ";
+
+        $this->db->query($sql);
+        $this->db->bind('user_id', $user_id);
+        return $this->db->resultSet();
     }
 }

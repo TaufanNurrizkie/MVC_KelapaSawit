@@ -14,6 +14,8 @@ require_once './Controller/tugasKerja.php';
 require_once './Controller/seleksiPenempatan.php';
 require_once './Controller/karyawan.php';
 require_once './Controller/User.php';
+require_once './Controller/absensi.php';
+require_once './Controller/gaji.php'; 
 
 $karyawan = new Karyawan();
 $seleksi = new SeleksiPenempatan();
@@ -22,6 +24,8 @@ $jadwal = new JadwalKerja();
 $auth = new Auth();
 $area = new AreaKerja();
 $user = new UserController();
+$absensi = new Absensi();
+$gaji = new GajiCotroller();
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
@@ -84,6 +88,9 @@ if (isset($_GET['action'])) {
         case 'apply':
             $seleksi->apply($_GET['schedule_id']);
             break;
+        case 'pengajuan-saya':
+            $seleksi->pengajuanSaya();
+            break;
 
         // Jadwal saya (karyawan)
         case 'jadwal-saya':
@@ -94,6 +101,20 @@ if (isset($_GET['action'])) {
             break;
         case 'apply-karyawan':
             $jadwal->apply();
+            break;
+
+        // Absensi
+        case 'absensi-checkin-form':
+            $absensi->formCheckIn();
+            break;
+        case 'absensi-checkin-process':
+            $absensi->processCheckIn();
+            break;
+        case 'absensi-checkout-form':
+            $absensi->formCheckOut();
+            break;
+        case 'absensi-checkout-process':
+            $absensi->processCheckOut();
             break;
 
         // Karyawan (admin)
@@ -107,6 +128,10 @@ if (isset($_GET['action'])) {
             break;
         case 'update-profile':
             $user->updateProfile();
+            break;
+
+        case 'gaji':
+            $gaji->index();
             break;
 
         default:

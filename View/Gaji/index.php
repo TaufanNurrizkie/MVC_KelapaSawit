@@ -133,7 +133,7 @@ require_once './Model/absensi_model.php';
             </div>
 
             <div class="main-content">
-                <h3><i class="fas fa-calendar-check me-2"></i> Jadwal Kerja Saya</h3>
+                <h3><i class="fas fa-money-bill-wave me-2"></i> Data Gaji Saya</h3>
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -141,83 +141,40 @@ require_once './Model/absensi_model.php';
                             <th>Area</th>
                             <th>Deskripsi</th>
                             <th>Peran</th>
-                            <th>Status</th>
                             <th>Mulai</th>
                             <th>Selesai</th>
-                            <th>Aksi</th>
+                            <th>Gaji</th>
+                            <th>Tanggal Buat</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (!empty($jadwalsaya)): ?>
-                            <?php
-                            $absenceModel = new Absence();
-                            $now = new DateTime("now", new DateTimeZone("Asia/Jakarta"));
-                            $no = 1;
-                            foreach ($jadwalsaya as $j):
-                                $hasCheckIn  = $absenceModel->hasCheckedInToday($j['id']);
-                                $hasCheckOut = $absenceModel->hasCheckedOutToday($j['id']);
-
-                                $startTime   = new DateTime($j['start_day'], new DateTimeZone("Asia/Jakarta"));
-                                $finishTime  = new DateTime($j['finish_day'], new DateTimeZone("Asia/Jakarta"));
-                            ?>
+                        <?php if (!empty($gajis)) : ?>
+                            <?php $no = 1; ?>
+                            <?php foreach ($gajis as $gaji) : ?>
                                 <tr>
                                     <td><?= $no++ ?></td>
-                                    <td><?= htmlspecialchars($j['area_name']) ?></td>
-                                    <td><?= htmlspecialchars($j['description']) ?></td>
-                                    <td><?= htmlspecialchars($j['choice_of_role']) ?></td>
-                                    <td><?= htmlspecialchars($j['status']) ?></td>
-                                    <td><?= htmlspecialchars($j['start_day']) ?></td>
-                                    <td><?= htmlspecialchars($j['finish_day']) ?></td>
-                                    <td>
-                                        <?php
-                                        if (!$hasCheckIn) {
-                                            $checkinLateThreshold = clone $startTime;
-                                            $checkinLateThreshold->modify('+5 minutes');
+                                    <td><?= htmlspecialchars($gaji['area_name']) ?></td>
+                                    <td><?= htmlspecialchars($gaji['description']) ?></td>
+                                    <td><?= htmlspecialchars($gaji['choice_of_role'] ?? '-') ?></td>
 
-                                            if ($now < $startTime) {
-                                                echo '<span class="badge bg-secondary"><i class="fas fa-clock me-1"></i> Belum Waktu Check-In</span>';
-                                            } elseif ($now > $finishTime) {
-                                                echo '<span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> Lewat Waktu Check-In (Terlalu Lama)</span>';
-                                            } elseif ($now >= $startTime && $now <= $checkinLateThreshold) {
-                                                // Check-In normal
-                                                echo '<a href="index.php?action=absensi-checkin-form&work_schedule_id=' . $j['id'] . '" class="btn btn-success btn-sm">
-                    <i class="fas fa-sign-in-alt me-1"></i> Check-In
-                  </a>';
-                                            } else {
-                                                // Lewat waktu check-in > 5 menit
-                                                echo '<a href="index.php?action=absensi-checkin-form&work_schedule_id=' . $j['id'] . '&late=1" class="btn btn-danger btn-sm">
-                    <i class="fas fa-exclamation-triangle me-1"></i> Lewat Waktu Check-In
-                  </a>';
-                                            }
-                                        } elseif ($hasCheckIn && !$hasCheckOut) {
-                                            if ($now < $finishTime) {
-                                                echo '<span class="badge bg-secondary"><i class="fas fa-clock me-1"></i> Belum Waktu Check-Out</span>';
-                                            } elseif ($now > $finishTime->modify('+4 hours')) {
-                                                echo '<span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> Lewat Waktu Check-Out</span>';
-                                            } else {
-                                                echo '<a href="index.php?action=absensi-checkout-form&work_schedule_id=' . $j['id'] . '" class="btn btn-warning btn-sm">
-                    <i class="fas fa-sign-out-alt me-1"></i> Check-Out
-                  </a>';
-                                            }
-                                        } else {
-                                            echo '<span class="badge bg-light text-dark"><i class="fas fa-check-circle me-1"></i> Selesai</span>';
-                                        }
-                                        ?>
-                                    </td>
-
+                                    <td><?= htmlspecialchars($gaji['start_day']) ?></td>
+                                    <td><?= htmlspecialchars($gaji['finish_day']) ?></td>
+                                    <td>Rp <?= number_format($gaji['salary'], 0, ',', '.') ?></td>
+                                    <td><?= htmlspecialchars($gaji['created_at']) ?></td>
                                 </tr>
                             <?php endforeach; ?>
-                        <?php else: ?>
+                        <?php else : ?>
                             <tr>
                                 <td colspan="8" class="text-center text-muted">
-                                    <i class="fas fa-info-circle me-2"></i> Belum ada jadwal kerja.
+                                    <i class="fas fa-info-circle me-2"></i> Belum ada data gaji.
                                 </td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
             </div>
-        </main>
+    </div>
+    </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

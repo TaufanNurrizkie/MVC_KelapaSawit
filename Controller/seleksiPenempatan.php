@@ -59,4 +59,18 @@ class SeleksiPenempatan
         header("Location: index.php?action=jadwal-terbuka");
         exit;
     }
+
+    public function pengajuanSaya()
+    {
+        if (!isset($_SESSION['user'])) {
+            header("Location: index.php?action=login");
+            exit;
+        }
+
+        $user_id = $_SESSION['user']['id'];
+
+        $pengajuanSaya = $this->model->getPengajuanSaya($user_id);
+
+        include './View/Seleksi_Penempatan/status-pengajuan.php';
+    }
 }
