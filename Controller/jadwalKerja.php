@@ -62,10 +62,17 @@ class JadwalKerja
 
     public function delete($id)
     {
-        $this->model->delete($id);
+        $deleted = $this->model->delete($id);
+
+        if (!$deleted) {
+            echo "<script>alert('❗ Jadwal kerja tidak dapat dihapus karena sudah ada pengajuan dari karyawan.'); window.location='index.php?action=jadwal';</script>";
+            return;
+        }
+
         header("Location: index.php?action=jadwal");
         exit;
     }
+
 
     public function daftarUntukKaryawan()
     {

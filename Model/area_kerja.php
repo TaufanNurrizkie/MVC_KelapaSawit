@@ -48,6 +48,17 @@ class area_kerja
 
     public function delete($id)
     {
+        // Cek apakah area digunakan di tabel schedules
+        $this->db->query("SELECT COUNT(*) as total FROM schedules WHERE area_id = :id");
+        $this->db->bind('id', $id);
+        $result = $this->db->single();
+
+        if ($result['total'] > 0) {
+            // Return false agar controller bisa tangani
+            return false;
+        }
+
+        // Jika tidak dipakai, baru hapus
         $this->db->query("DELETE FROM $this->table WHERE id = :id");
         $this->db->bind('id', $id);
         return $this->db->execute();

@@ -5,393 +5,248 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Area Kerja</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    },
+                    animation: {
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.2s ease-out',
+                        'pulse-subtle': 'pulseSubtle 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        slideIn: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(0)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        pulseSubtle: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.02)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8fafc;
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
         }
-
-        .wrapper {
-            display: flex;
-            min-height: 100vh;
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        #sidebar {
-            width: 280px;
-            height: 100%;
-            background: linear-gradient(135deg, #15803d 0%, #22c55e 50%, #065f46 100%);
-            color: white;
-            display: flex;
-            flex-direction: column;
+        .nav-link-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .nav-link-hover:hover {
+            transform: translateX(8px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar-gradient {
+            background: linear-gradient(135deg, #065f46 0%, #047857 25%, #059669 50%, #10b981 75%, #34d399 100%);
             position: relative;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
         }
-
-        #sidebar::before {
+        .sidebar-gradient::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(0,0,0,0.05) 100%);
             pointer-events: none;
         }
-
-        .sidebar-header {
-            padding: 25px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 4px;
         }
-
-        .sidebar-title {
-            font-weight: 700;
-            font-size: 22px;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .sidebar-title i {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px;
-            border-radius: 50%;
-            font-size: 16px;
-        }
-
-        .sidebar-subtitle {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 400;
-        }
-
-
-        .sidebar-nav {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 20px 0;
-        }
-
-        /* Custom scrollbar for sidebar-nav */
-        .sidebar-nav::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sidebar-nav::-webkit-scrollbar-track {
+        .scrollbar-thin::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            border-radius: 2px;
         }
-
-        .sidebar-nav::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #22c55e, #15803d);
-            border-radius: 4px;
-        }
-
-        .sidebar-nav::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #16a34a, #065f46);
-        }
-
-        .nav-section {
-            margin-bottom: 25px;
-        }
-
-        .nav-section-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.6);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-            padding: 0 20px;
-        }
-
-        .nav-item {
-            margin-bottom: 4px;
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            margin: 0 8px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            border-radius: 10px;
-        }
-
-        .nav-link:hover {
-            color: white;
-            transform: translateX(5px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .nav-link:hover::before {
-            opacity: 1;
-        }
-
-        .nav-link.active {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-link.active::before {
-            opacity: 1;
-        }
-
-        .nav-link i {
-            width: 20px;
-            margin-right: 15px;
-            font-size: 16px;
-            text-align: center;
-        }
-
-        .nav-link span {
-            font-size: 14px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .sidebar-footer {
-            flex-shrink: 0;
-            padding: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .user-details h6 {
-            margin: 0;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .user-details small {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 12px;
-        }
-
-        #logout-btn {
-            background: linear-gradient(135deg, #16a34a, #15803d);
-            border: none;
-            padding: 12px 16px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            width: 100%;
-            text-decoration: none;
-        }
-
-        #logout-btn:hover {
-            background: linear-gradient(135deg, #15803d, #166534);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(22, 163, 74, 0.4);
-            color: white;
-        }
-
-        #logout-btn i {
-            font-size: 16px;
-        }
-
-        main {
-            flex: 1;
-            padding: 30px;
-            background: #f8fafc;
-        }
-
-        @media (max-width: 768px) {
-            #sidebar {
-                width: 100%;
-                position: fixed;
-                left: -100%;
-                z-index: 1000;
-                transition: left 0.3s ease;
-            }
-
-            #sidebar.active {
-                left: 0;
-            }
-
-            main {
-                width: 100%;
-            }
-        }
-
-        #sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        #sidebar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        #sidebar::-webkit-scrollbar-thumb {
+        .scrollbar-thin::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
+            border-radius: 2px;
         }
-
-        #sidebar::-webkit-scrollbar-thumb:hover {
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
 
-<body>
-    <div class="wrapper">
-        <aside id="sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-title">
-                    <i class="fas fa-cogs"></i>
-                    Admin Panel
+<body class="bg-gray-50 min-h-screen overflow-x-hidden">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-72 sidebar-gradient text-white flex flex-col shadow-2xl relative z-10 transition-all duration-300 ease-in-out">
+            
+            <!-- Header -->
+            <div class="p-6 border-b border-white/10">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center glass-effect">
+                        <i class="fas fa-cogs text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">Admin Panel</h1>
+                        <p class="text-xs text-white/70">Management System</p>
+                    </div>
                 </div>
-                <div class="sidebar-subtitle">Management System</div>
             </div>
 
-            <nav class="sidebar-nav">
-                <div class="nav-section">
-                    <div class="nav-section-title">Dashboard</div>
-                    <div class="nav-item">
-                        <a href="index.php?action=dashboard" class="nav-link">
-                            <i class="fas fa-home"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-section-title">Manajemen</div>
-                    <div class="nav-item">
-                        <a href="index.php?action=area" class="nav-link active">
-                            <i class="fas fa-map-marked-alt"></i>
-                            <span>Daftar Area</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="index.php?action=jadwal" class="nav-link">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>Jadwal Kerja</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="index.php?action=karyawan" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>Karyawan</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="index.php?action=seleksi" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>Seleksi_Penempatan</span>
-                        </a>
-                    <div class="nav-item">
-                        <a href="index.php?action=role" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>Pekerjaan</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="index.php?action=gaji" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>Penggajian</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="index.php?action=riwayat" class="nav-link">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>Laporan</span>
-                        </a>
+            <!-- Navigation -->
+            <nav class="flex-1 px-4 py-6 overflow-y-auto scrollbar-thin">
+                <div class="space-y-6">
+                    <!-- Management Section -->
+                    <div class="animate-fade-in">
+                        <h3 class="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3 px-3">
+                            Manajemen
+                        </h3>
+                        <div class="space-y-1">
+                            <a href="index.php?action=area" 
+                               class="nav-link-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/90 hover:text-white active:bg-white/15 active:text-white group">
+                                <i class="fas fa-map-marked-alt w-5 text-center group-hover:scale-110 transition-transform"></i>
+                                <span>Daftar Area</span>
+                            </a>
+                            
+                            <a href="index.php?action=jadwal" 
+                               class="nav-link-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/90 hover:text-white group">
+                                <i class="fas fa-calendar-alt w-5 text-center group-hover:scale-110 transition-transform"></i>
+                                <span>Jadwal Kerja</span>
+                            </a>
+                            
+                            <a href="index.php?action=karyawan" 
+                               class="nav-link-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/90 hover:text-white group">
+                                <i class="fas fa-users w-5 text-center group-hover:scale-110 transition-transform"></i>
+                                <span>Karyawan</span>
+                            </a>
+                            
+                            <a href="index.php?action=seleksi" 
+                               class="nav-link-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/90 hover:text-white group">
+                                <i class="fas fa-user-check w-5 text-center group-hover:scale-110 transition-transform"></i>
+                                <span>Seleksi Penempatan</span>
+                            </a>
+                            
+                            <a href="index.php?action=role" 
+                               class="nav-link-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/90 hover:text-white group">
+                                <i class="fas fa-briefcase w-5 text-center group-hover:scale-110 transition-transform"></i>
+                                <span>Pekerjaan</span>
+                            </a>
+                            
+                            <a href="index.php?action=gaji" 
+                               class="nav-link-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/90 hover:text-white group">
+                                <i class="fas fa-money-bill-wave w-5 text-center group-hover:scale-110 transition-transform"></i>
+                                <span>Penggajian</span>
+                            </a>
+                            
+                            <a href="index.php?action=riwayat" 
+                               class="nav-link-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/90 hover:text-white group">
+                                <i class="fas fa-chart-bar w-5 text-center group-hover:scale-110 transition-transform"></i>
+                                <span>Laporan</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </nav>
 
-            <div class="sidebar-footer">
-                <div class="user-info">
-                    <a href="index.php?action=profile" style="text-decoration: none; color: inherit;">
-                       <div class="user-avatar">
-                            <?= strtoupper(substr($_SESSION['user']['name'] ?? 'Admin', 0, 1)) ?>
+            <!-- Footer -->
+            <div class="p-4 border-t border-white/10 bg-black/10">
+                <!-- User Profile -->
+                <div class="flex items-center gap-3 mb-4 p-3 rounded-lg glass-effect hover:bg-white/10 transition-colors">
+                    <a href="index.php?action=profile" class="flex items-center gap-3 w-full text-white hover:text-white no-underline">
+                        <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
+                            A
+                        </div>
+                        <div class="flex-1">
+                            <h6 class="text-sm font-semibold mb-0">Admin</h6>
+                            <small class="text-xs text-white/70">Administrator</small>
                         </div>
                     </a>
-                    <div class="user-details">
-                        <h6><?= $_SESSION['user']['name'] ?? 'Admin' ?></h6>
-                        <small>Administrator</small>
-                    </div>
                 </div>
-                <a href="index.php?action=logout" id="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
+
+                <!-- Logout Button -->
+                <a href="index.php?action=logout" 
+                   class="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-95">
+                    <i class="fas fa-sign-out-alt text-sm"></i>
                     <span>Logout</span>
                 </a>
             </div>
         </aside>
+
+
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-toggle" 
+                class="fixed top-4 left-4 z-50 lg:hidden bg-primary-600 text-white p-3 rounded-lg shadow-lg hover:bg-primary-700 transition-colors">
+            <i class="fas fa-bars"></i>
+        </button>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden"></div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const currentPage = new URLSearchParams(window.location.search).get('action') || 'dashboard';
+            // Set active navigation link
+            const navLinks = document.querySelectorAll('nav a');
+            const currentPage = new URLSearchParams(window.location.search).get('action') || 'area';
 
             navLinks.forEach(link => {
                 const linkAction = new URL(link.href).searchParams.get('action');
                 if (linkAction === currentPage) {
-                    link.classList.add('active');
+                    link.classList.add('active', 'bg-white/15', 'text-white');
                 } else {
-                    link.classList.remove('active');
+                    link.classList.remove('active', 'bg-white/15', 'text-white');
                 }
             });
+
+            // Mobile menu functionality
+            const mobileToggle = document.getElementById('mobile-menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+
+            mobileToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            });
+
+            overlay.addEventListener('click', function() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            });
+
+            // Handle responsive behavior
+            function handleResize() {
+                if (window.innerWidth >= 1024) {
+                    sidebar.classList.remove('-translate-x-full');
+                    overlay.classList.add('hidden');
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            }
+
+            window.addEventListener('resize', handleResize);
+            handleResize(); // Initial check
         });
     </script>
 </body>

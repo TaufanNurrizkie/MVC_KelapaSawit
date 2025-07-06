@@ -64,7 +64,13 @@ class AreaKerja
 
     public function delete($id)
     {
-        $this->model->delete($id);
+        $deleted = $this->model->delete($id);
+        if (!$deleted) {
+            echo "<script>alert('❗ Area tidak dapat dihapus karena masih digunakan dalam jadwal kerja.'); window.location='index.php?action=area';</script>";
+            return;
+        }
+
+        // Berhasil dihapus
         header("Location: index.php?action=area");
         exit;
     }
