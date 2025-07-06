@@ -16,7 +16,7 @@ require_once './Controller/karyawan.php';
 require_once './Controller/User.php';
 require_once './Controller/absensi.php';
 require_once './Controller/gaji.php';
-require_once './Controller/role.php';
+require_once './Controller/Role.php';
 require_once './Controller/gaji.php';
 require_once './Controller/history.php';
 

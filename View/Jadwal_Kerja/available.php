@@ -5,236 +5,226 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Jadwal Terbuka</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #16a34a, #22c55e);
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            color: #fff;
-        }
-        .main-content {
-            background: linear-gradient(135deg, #16a34a, #22c55e);
-            backdrop-filter: blur(10px);
-            color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            margin: 30px;
-        }
-        h3 {
-            color: #d1fae5;
-            font-weight: 700;
-            margin-bottom: 25px;
-        }
-        .table {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .table th {
-            background-color: rgba(22, 163, 74, 0.8);
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        .table td {
-            vertical-align: middle;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-        .table-striped tbody tr:nth-of-type(even) {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        .text-muted {
-            color: rgba(255, 255, 255, 0.6) !important;
-        }
-        .btn-primary {
-            background-color: #16a34a;
-            border-color: #15803d;
-        }
-        .btn-primary:hover {
-            background-color: #15803d;
-            border-color: #065f46;
-        }
-        .page-breadcrumb {
-            margin: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #fff;
-        }
-        .breadcrumb-title {
-            font-weight: 600;
-            font-size: 18px;
-            color: rgb(25, 185, 73);
-        }
-        .breadcrumb {
-            background: transparent;
-            padding: 0;
-            margin-bottom: 0;
-        }
-        .breadcrumb-item a {
-            color: rgb(41, 158, 26);
-            text-decoration: none;
-        }
-        .breadcrumb-item a:hover {
-            text-decoration: underline;
-        }
-        .breadcrumb-item.active {
-            color: #fff;
-            font-weight: 600;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jadwal Terbuka</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      background-attachment: fixed;
+      background-size: 400% 400%;
+      animation: gradientMove 20s ease infinite;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .gradient-green {
+      background: linear-gradient(135deg, #15803d 0%, #22c55e 50%, #065f46 100%);
+    }
+
+    .gradient-green-text {
+      background: linear-gradient(135deg, #15803d, #22c55e, #065f46);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-green {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-green:hover {
+      background: linear-gradient(135deg, #065f46, #15803d);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    table thead {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+      color: white;
+    }
+
+    table tbody tr:hover {
+      background: rgba(34, 197, 94, 0.1);
+      cursor: pointer;
+    }
+
+    .status-badge {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      color: #166534;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="wrapper d-flex">
-        <?php include __DIR__ . '../../Template/sidebarKaryawan.php'; ?>
+  <div class="flex">
+    <?php include __DIR__ . '../../Template/sidebarKaryawan.php'; ?>
 
-        <main class="w-100">
-            <div class="page-breadcrumb">
-                <div class="breadcrumb-title pe-3">Dashboard</div>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="index.php?action=jadwal-saya">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Jadwal Terbuka</li>
-                    </ol>
-                </nav>
-            </div>
+    <main class="flex-1 p-8">
 
-            <div class="main-content">
-                <h3 class="mb-4"><i class="fas fa-calendar-plus me-2"></i> Jadwal Kerja yang Tersedia</h3>
 
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Area</th>
-                                <th>Deskripsi</th>
-                                <th>Mulai</th>
-                                <th>Selesai</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php if (!empty($jadwalTersedia)): ?>
-                            <?php $no = 1;
-                            foreach ($jadwalTersedia as $j): ?>
-                                <tr>
-                                    <td><?= $no++ ?></td>
-                                    <td><?= htmlspecialchars($j['area_name']) ?></td>
-                                    <td><?= htmlspecialchars($j['description']) ?></td>
-                                    <td><?= htmlspecialchars($j['start_day']) ?></td>
-                                    <td><?= htmlspecialchars($j['finish_day']) ?></td>
-                                    <td>
-                                        <button
-                                            type="button"
-                                            class="btn btn-outline-light btn-sm"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#detailModal"
-                                            data-id="<?= $j['id'] ?>"
-                                            data-area="<?= htmlspecialchars($j['area_name']) ?>"
-                                            data-description="<?= htmlspecialchars($j['description']) ?>"
-                                            data-start="<?= htmlspecialchars($j['start_day']) ?>"
-                                            data-finish="<?= htmlspecialchars($j['finish_day']) ?>"
-                                            data-status="<?= htmlspecialchars($j['status'] ?? '') ?>"> <!-- perubahan -->
-                                            <i class="fas fa-info-circle me-1"></i> Detail
-                                        </button>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="6" class="text-center text-muted">
-                                    <i class="fas fa-info-circle me-2"></i> Belum ada jadwal tersedia.
-                                </td>
-                            </tr>
-                        <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- MODAL DETAIL -->
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content text-dark">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="detailModalLabel"><i class="fas fa-info-circle me-2"></i> Detail Jadwal</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Area:</strong> <span id="modalArea"></span></p>
-                    <p><strong>Deskripsi:</strong> <span id="modalDescription"></span></p>
-                    <p><strong>Mulai:</strong> <span id="modalStart"></span></p>
-                    <p><strong>Selesai:</strong> <span id="modalFinish"></span></p>
-                </div>
-                <div class="modal-footer">
-                    <div id="modalAction"></div> <!-- perubahan -->
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
-                </div>
-            </div>
+      <div class="glass">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">Jadwal Kerja Tersedia</h2>
+          <div class="text-gray-500 text-sm" id="currentTime"></div>
         </div>
+
+        <div class="overflow-x-auto rounded-lg">
+          <table class="min-w-full text-sm text-gray-700">
+            <thead>
+              <tr>
+                <th class="px-6 py-4 text-left">No</th>
+                <th class="px-6 py-4 text-left">Area Kerja</th>
+                <th class="px-6 py-4 text-left">Deskripsi</th>
+                <th class="px-6 py-4 text-left">Mulai</th>
+                <th class="px-6 py-4 text-left">Selesai</th>
+                <th class="px-6 py-4 text-left">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              <?php if (!empty($jadwalTersedia)): ?>
+                <?php $no = 1; ?>
+                <?php foreach ($jadwalTersedia as $j): ?>
+                  <tr class="border-b">
+                    <td class="px-6 py-4"><?= $no++ ?></td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($j['area_name']) ?></td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($j['description']) ?></td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($j['start_day']) ?></td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($j['finish_day']) ?></td>
+                    <td class="px-6 py-4">
+                      <button
+                        class="btn-green"
+                        data-bs-toggle="modal"
+                        data-bs-target="#detailModal"
+                        data-id="<?= $j['id'] ?>"
+                        data-area="<?= htmlspecialchars($j['area_name']) ?>"
+                        data-description="<?= htmlspecialchars($j['description']) ?>"
+                        data-start="<?= htmlspecialchars($j['start_day']) ?>"
+                        data-finish="<?= htmlspecialchars($j['finish_day']) ?>"
+                        data-status="<?= htmlspecialchars($j['status'] ?? '') ?>"
+                      >
+                        <i class="fas fa-info-circle"></i> Detail
+                      </button>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <tr>
+                  <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                    <i class="fas fa-calendar-times text-3xl text-gray-400 mb-4"></i>
+                    <p class="text-xl font-semibold">Belum Ada Jadwal Tersedia</p>
+                  </td>
+                </tr>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content glass">
+        <div class="modal-header gradient-green text-white border-0">
+          <h5 class="modal-title"><i class="fas fa-info-circle me-2"></i> Detail Jadwal</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Area:</strong> <span id="modalArea"></span></p>
+          <p><strong>Deskripsi:</strong> <span id="modalDescription"></span></p>
+          <p><strong>Mulai:</strong> <span id="modalStart"></span></p>
+          <p><strong>Selesai:</strong> <span id="modalFinish"></span></p>
+          <div id="modalAction" class="mt-4"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-green" data-bs-dismiss="modal">
+            <i class="fas fa-times"></i> Tutup
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const detailModal = document.getElementById('detailModal');
-        detailModal.addEventListener('show.bs.modal', event => {
-            const button = event.relatedTarget;
-            const id = parseInt(button.getAttribute('data-id'));
-            const area = button.getAttribute('data-area');
-            const description = button.getAttribute('data-description');
-            const start = button.getAttribute('data-start');
-            const finish = button.getAttribute('data-finish');
-            const status = button.getAttribute('data-status'); // perubahan
+  <script>
+    // Clock
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('currentTime').textContent =
+        now.toLocaleTimeString('id-ID') + ' | ' + now.toLocaleDateString('id-ID');
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
 
-            document.getElementById('modalArea').textContent = area;
-            document.getElementById('modalDescription').textContent = description;
-            document.getElementById('modalStart').textContent = start;
-            document.getElementById('modalFinish').textContent = finish;
+    // Modal logic
+    const detailModal = document.getElementById('detailModal');
+    detailModal.addEventListener('show.bs.modal', event => {
+      const btn = event.relatedTarget;
+      document.getElementById('modalArea').textContent = btn.dataset.area;
+      document.getElementById('modalDescription').textContent = btn.dataset.description;
+      document.getElementById('modalStart').textContent = btn.dataset.start;
+      document.getElementById('modalFinish').textContent = btn.dataset.finish;
 
-            const modalAction = document.getElementById('modalAction');
-            modalAction.innerHTML = '';
+      const id = parseInt(btn.dataset.id);
+      const status = btn.dataset.status;
+      const applied = <?= json_encode($appliedIds ?? []); ?>;
 
-            const applied = <?= json_encode($appliedIds ?? []); ?>;
+      const modalAction = document.getElementById('modalAction');
+      modalAction.innerHTML = '';
 
-            if (status === 'diterima') {
-                modalAction.innerHTML = `
-                    <span class="badge bg-success">
-                        <i class="fas fa-check-circle me-1"></i> Diterima
-                    </span>
-                `;
-            } else if (applied.includes(id)) {
-                modalAction.innerHTML = `
-                    <span class="badge bg-warning text-dark">
-                        <i class="fas fa-hourglass-half me-1"></i> Sudah Diajukan
-                    </span>
-                `;
-            } else {
-                modalAction.innerHTML = `
-                    <a href="index.php?action=apply&schedule_id=${id}" class="btn btn-primary">
-                        <i class="fas fa-paper-plane me-1"></i> Ajukan Diri
-                    </a>
-                `;
-            }
-        });
-    </script>
+      if (status === 'diterima') {
+        modalAction.innerHTML = `
+          <div class="status-badge">
+            <i class="fas fa-check-circle"></i> Lamaran Diterima
+          </div>`;
+      } else if (applied.includes(id)) {
+        modalAction.innerHTML = `
+          <div class="status-badge">
+            <i class="fas fa-hourglass-half"></i> Menunggu Konfirmasi
+          </div>`;
+      } else {
+        modalAction.innerHTML = `
+          <a href="index.php?action=apply&schedule_id=${id}" class="btn-green">
+            <i class="fas fa-paper-plane"></i> Ajukan Lamaran
+          </a>`;
+      }
+    });
+  </script>
 </body>
 </html>

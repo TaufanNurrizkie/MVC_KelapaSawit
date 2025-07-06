@@ -5,194 +5,265 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Status Pengajuan</title> <!-- UBAH JUDUL -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #16a34a, #22c55e);
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            color: #fff;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Status Pengajuan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      background-attachment: fixed;
+      background-size: 400% 400%;
+      animation: gradientMove 20s ease infinite;
+      min-height: 100vh;
+    }
 
-        .main-content {
-            background: linear-gradient(135deg, #16a34a, #22c55e);
-            backdrop-filter: blur(10px);
-            color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            margin: 30px;
-        }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-        h3 {
-            color: #d1fae5;
-            font-weight: 700;
-            margin-bottom: 25px;
-        }
+    .gradient-green {
+      background: linear-gradient(135deg, #15803d 0%, #22c55e 50%, #065f46 100%);
+    }
 
-        .table {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+    .gradient-green-text {
+      background: linear-gradient(135deg, #15803d, #22c55e, #065f46);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .table th {
-            background-color: rgba(22, 163, 74, 0.8);
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.3);
-        }
+    .btn-green {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
 
-        .table td {
-            vertical-align: middle;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
+    .btn-green:hover {
+      background: linear-gradient(135deg, #065f46, #15803d);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+      color: #fff;
+    }
 
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 2rem;
+    }
 
-        .table-striped tbody tr:nth-of-type(even) {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
+    table thead {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+      color: white;
+    }
 
-        .text-muted {
-            color: rgba(255, 255, 255, 0.6) !important;
-        }
+    table tbody tr:hover {
+      background: rgba(34, 197, 94, 0.1);
+      cursor: pointer;
+    }
 
-        .btn-primary {
-            background-color: #16a34a;
-            border-color: #15803d;
-        }
+    .status-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-        .btn-primary:hover {
-            background-color: #15803d;
-            border-color: #065f46;
-        }
+    .status-success {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      color: #166534;
+    }
 
-        .page-breadcrumb {
-            margin: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #fff;
-        }
+    .status-warning {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      color: #92400e;
+    }
 
-        .breadcrumb-title {
-            font-weight: 600;
-            font-size: 18px;
-            color: rgb(25, 185, 73);
-        }
+    .status-danger {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      color: #991b1b;
+    }
 
-        .breadcrumb {
-            background: transparent;
-            padding: 0;
-            margin-bottom: 0;
-        }
+    .status-pending {
+      background: linear-gradient(135deg, #ddd6fe, #c4b5fd);
+      color: #6d28d9;
+    }
 
-        .breadcrumb-item a {
-            color: rgb(41, 158, 26);
-            text-decoration: none;
-        }
+    .pulse-animation {
+      animation: pulse 2s infinite;
+    }
 
-        .breadcrumb-item a:hover {
-            text-decoration: underline;
-        }
-
-        .breadcrumb-item.active {
-            color: #fff;
-            font-weight: 600;
-        }
-    </style>
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.7;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="wrapper d-flex">
-        <?php include __DIR__ . '../../Template/sidebarKaryawan.php'; ?>
+  <div class="flex">
+    <?php include __DIR__ . '../../Template/sidebarKaryawan.php'; ?>
+    
+    <main class="flex-1 p-8">
+      <div class="glass">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">
+            <i class="fas fa-paper-plane mr-3 text-green-600"></i>
+            Status Pengajuan
+          </h2>
+          <div class="text-gray-500 text-sm" id="currentTime"></div>
+        </div>
+        
+        <div class="overflow-x-auto rounded-lg">
+          <table class="min-w-full text-sm text-gray-700">
+            <thead>
+              <tr>
+                <th class="px-6 py-4 text-left">No</th>
+                <th class="px-6 py-4 text-left">Area Kerja</th>
+                <th class="px-6 py-4 text-left">Deskripsi</th>
+                <th class="px-6 py-4 text-left">Mulai</th>
+                <th class="px-6 py-4 text-left">Selesai</th>
+                <th class="px-6 py-4 text-left">Status</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              <?php if (!empty($pengajuanSaya)): ?>
+                <?php 
+                $no = 1;
+                foreach ($pengajuanSaya as $p): 
+                ?>
+                  <tr class="border-b">
+                    <td class="px-6 py-4"><?= $no++ ?></td>
+                    <td class="px-6 py-4 font-semibold"><?= htmlspecialchars($p['area_name']) ?></td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($p['description']) ?></td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($p['start_day']) ?></td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($p['finish_day']) ?></td>
+                    <td class="px-6 py-4">
+                      <?php
+                      $status = htmlspecialchars($p['status']);
+                      if ($status === 'pending') {
+                        echo '<span class="status-badge status-pending pulse-animation">
+                                <i class="fas fa-hourglass-half"></i>
+                                Pending
+                              </span>';
+                      } elseif ($status === 'accepted') {
+                        echo '<span class="status-badge status-success">
+                                <i class="fas fa-check-circle"></i>
+                                Diterima
+                              </span>';
+                      } elseif ($status === 'rejected') {
+                        echo '<span class="status-badge status-danger">
+                                <i class="fas fa-times-circle"></i>
+                                Ditolak
+                              </span>';
+                      } else {
+                        echo '<span class="status-badge status-warning">
+                                <i class="fas fa-question-circle"></i>
+                                ' . htmlspecialchars($status) . '
+                              </span>';
+                      }
+                      ?>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <tr>
+                  <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                    <i class="fas fa-inbox text-3xl text-gray-400 mb-4"></i>
+                    <p class="text-xl font-semibold">Belum Ada Pengajuan</p>
+                    <p class="text-sm mt-2">Anda belum mengajukan jadwal kerja apapun</p>
+                  </td>
+                </tr>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
 
-        <main class="w-100">
-            <div class="page-breadcrumb">
-                <div class="breadcrumb-title pe-3">Dashboard</div>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item">
-                            <a href="index.php?action=jadwal-saya">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">
-                            Status Pengajuan <!-- UBAH BREADCRUMB -->
-                        </li>
-                    </ol>
-                </nav>
+        <!-- Summary Cards -->
+        <?php if (!empty($pengajuanSaya)): ?>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
+            <?php
+            $totalPengajuan = count($pengajuanSaya);
+            $pending = array_filter($pengajuanSaya, fn($p) => $p['status'] === 'pending');
+            $accepted = array_filter($pengajuanSaya, fn($p) => $p['status'] === 'accepted');
+            $rejected = array_filter($pengajuanSaya, fn($p) => $p['status'] === 'rejected');
+            ?>
+            
+            <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center">
+              <div class="text-2xl font-bold text-white"><?= $totalPengajuan ?></div>
+              <div class="text-sm text-gray-200">Total Pengajuan</div>
+              <i class="fas fa-paper-plane text-blue-300 text-xl mt-2"></i>
             </div>
-
-            <div class="main-content">
-                <h3 class="mb-4"><i class="fas fa-paper-plane me-2"></i> Status Pengajuan</h3> <!-- UBAH HEADING -->
-
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Area</th>
-                                <th>Deskripsi</th>
-                                <th>Mulai</th>
-                                <th>Selesai</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($pengajuanSaya)): ?>
-                                <?php $no = 1;
-                                foreach ($pengajuanSaya as $p): ?>
-                                    <tr>
-                                        <td><?= $no++ ?></td>
-                                        <td><?= htmlspecialchars($p['area_name']) ?></td>
-                                        <td><?= htmlspecialchars($p['description']) ?></td>
-                                        <td><?= htmlspecialchars($p['start_day']) ?></td>
-                                        <td><?= htmlspecialchars($p['finish_day']) ?></td>
-                                        <td>
-                                            <?php
-                                            $status = htmlspecialchars($p['status']);
-                                            if ($status === 'pending') {
-                                                echo '<span class="badge bg-warning text-dark">Pending</span>';
-                                            } elseif ($status === 'accepted') {
-                                                echo '<span class="badge bg-success">Diterima</span>';
-                                            } elseif ($status === 'rejected') {
-                                                echo '<span class="badge bg-danger">Ditolak</span>';
-                                            } else {
-                                                echo htmlspecialchars($status);
-                                            }
-                                            ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">
-                                        <i class="fas fa-info-circle me-2"></i> Belum ada pengajuan.
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
+            
+            <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center">
+              <div class="text-2xl font-bold text-purple-300"><?= count($pending) ?></div>
+              <div class="text-sm text-gray-200">Pending</div>
+              <i class="fas fa-hourglass-half text-purple-300 text-xl mt-2"></i>
             </div>
-        </main>
-    </div>
+            
+            <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center">
+              <div class="text-2xl font-bold text-green-300"><?= count($accepted) ?></div>
+              <div class="text-sm text-gray-200">Diterima</div>
+              <i class="fas fa-check-circle text-green-300 text-xl mt-2"></i>
+            </div>
+            
+            <div class="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center">
+              <div class="text-2xl font-bold text-red-300"><?= count($rejected) ?></div>
+              <div class="text-sm text-gray-200">Ditolak</div>
+              <i class="fas fa-times-circle text-red-300 text-xl mt-2"></i>
+            </div>
+          </div>
+        <?php endif; ?>
+      </div>
+    </main>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Clock
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('currentTime').textContent =
+        now.toLocaleTimeString('id-ID') + ' | ' + now.toLocaleDateString('id-ID');
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // Add row click animation
+    document.addEventListener('DOMContentLoaded', function() {
+      const rows = document.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        row.addEventListener('click', function() {
+          this.style.transform = 'scale(1.02)';
+          setTimeout(() => {
+            this.style.transform = 'scale(1)';
+          }, 150);
+        });
+      });
+    });
+  </script>
 </body>
-
 </html>

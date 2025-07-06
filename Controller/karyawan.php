@@ -15,6 +15,6 @@ class Karyawan
     {
         $admins = $this->model->getAllAdmins();
         $karyawans = $this->model->getAllKaryawans();
-        include './View/Karyawan/index.php';
+        include './View/karyawan/index.php';
     }
 }

@@ -6,220 +6,317 @@ if ($_SESSION['user']['role'] !== 'karyawan') {
 }
 require_once './Model/absensi_model.php';
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Jadwal Saya</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap & FontAwesome -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            color: #fff;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jadwal Saya</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      background-attachment: fixed;
+      background-size: 400% 400%;
+      animation: gradientMove 20s ease infinite;
+      min-height: 100vh;
+    }
 
-        .main-content {
-            background: linear-gradient(135deg, #16a34a, #22c55e);
-            backdrop-filter: blur(10px);
-            color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            margin: 30px;
-        }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-        h3 {
-            color: #d1fae5;
-            font-weight: 700;
-            margin-bottom: 25px;
-        }
+    .gradient-green {
+      background: linear-gradient(135deg, #15803d 0%, #22c55e 50%, #065f46 100%);
+    }
 
-        .table {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+    .gradient-green-text {
+      background: linear-gradient(135deg, #15803d, #22c55e, #065f46);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .table th {
-            background-color: rgba(22, 163, 74, 0.8);
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.3);
-        }
+    .btn-green {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
 
-        .table td {
-            vertical-align: middle;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
+    .btn-green:hover {
+      background: linear-gradient(135deg, #065f46, #15803d);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+      color: #fff;
+    }
 
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
+    .btn-warning {
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
 
-        .table-striped tbody tr:nth-of-type(even) {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
+    .btn-warning:hover {
+      background: linear-gradient(135deg, #d97706, #f59e0b);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+      color: #fff;
+    }
 
-        .text-muted {
-            color: rgba(255, 255, 255, 0.6) !important;
-        }
+    .btn-danger {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
 
-        .btn-primary {
-            background-color: #16a34a;
-            border-color: #15803d;
-        }
+    .btn-danger:hover {
+      background: linear-gradient(135deg, #b91c1c, #dc2626);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+      color: #fff;
+    }
 
-        .btn-primary:hover {
-            background-color: #15803d;
-            border-color: #065f46;
-        }
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 2rem;
+    }
 
-        .page-breadcrumb {
-            margin: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #fff;
-        }
+    table thead {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+      color: white;
+    }
 
-        .breadcrumb-title {
-            font-weight: 600;
-            font-size: 18px;
-            color: rgb(25, 185, 73);
-        }
+    table tbody tr:hover {
+      background: rgba(34, 197, 94, 0.1);
+      cursor: pointer;
+    }
 
-        .breadcrumb {
-            background: transparent;
-            padding: 0;
-            margin-bottom: 0;
-        }
+    .status-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-        .breadcrumb-item a {
-            color: rgb(41, 158, 26);
-            text-decoration: none;
-        }
+    .status-success {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      color: #166534;
+    }
 
-        .breadcrumb-item a:hover {
-            text-decoration: underline;
-        }
+    .status-warning {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      color: #92400e;
+    }
 
-        .breadcrumb-item.active {
-            color: #fff;
-            font-weight: 600;
-        }
-    </style>
+    .status-danger {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      color: #991b1b;
+    }
+
+    .status-secondary {
+      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+      color: #475569;
+    }
+
+    .status-light {
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      color: #334155;
+    }
+
+    .status-purple {
+      background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+      color: #7c3aed;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="wrapper d-flex">
-        <?php include __DIR__ . '../../Template/sidebarKaryawan.php'; ?>
-        <main class="w-100">
-            <!-- BREADCRUMB -->
-            <div class="page-breadcrumb">
-                <div class="breadcrumb-title pe-3">Dashboard</div>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="index.php?action=jadwal-saya">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Jadwal Saya</li>
-                    </ol>
-                </nav>
-            </div>
+  <div class="flex">
+    <?php include __DIR__ . '../../Template/sidebarKaryawan.php'; ?>
+    
+    <main class="flex-1 p-8">
+      <div class="glass">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">Jadwal Kerja Saya</h2>
+          <div class="text-gray-500 text-sm" id="currentTime"></div>
+        </div>
+        
+        <div class="overflow-x-auto rounded-lg">
+          <table class="min-w-full text-sm text-gray-700">
+            <thead>
+              <tr>
+                <th class="px-6 py-4 text-left">No</th>
+                <th class="px-6 py-4 text-left">Area Kerja</th>
+                <th class="px-6 py-4 text-left">Deskripsi</th>
+                <th class="px-6 py-4 text-left">Peran</th>
+                <th class="px-6 py-4 text-left">Status</th>
+                <th class="px-6 py-4 text-left">Mulai</th>
+                <th class="px-6 py-4 text-left">Selesai</th>
+                <th class="px-6 py-4 text-left">Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              <?php if (!empty($jadwalsaya)): ?>
+                <?php
+                $absenceModel = new Absence();
+                $now = new DateTime("now", new DateTimeZone("Asia/Jakarta"));
+                $no = 1;
+                foreach ($jadwalsaya as $j):
+                  $hasCheckIn  = $absenceModel->hasCheckedInToday($j['id']);
+                  $hasCheckOut = $absenceModel->hasCheckedOutToday($j['id']);
+                  $startTime   = new DateTime($j['start_day'], new DateTimeZone("Asia/Jakarta"));
+                  $finishTime  = new DateTime($j['finish_day'], new DateTimeZone("Asia/Jakarta"));
+                ?>
+                  <tr class="border-b">
+                    <td class="px-6 py-4"><?= $no++ ?></td>
+                    <td class="px-6 py-4 font-semibold"><?= htmlspecialchars($j['area_name']) ?></td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($j['description']) ?></td>
+                    <td class="px-6 py-4">
+                      <span class="status-badge status-purple">
+                        <i class="fas fa-user-tag"></i>
+                        <?= htmlspecialchars($j['choice_of_role']) ?>
+                      </span>
+                    </td>
+                    <td class="px-6 py-4">
+                      <span class="status-badge status-success">
+                        <i class="fas fa-check-circle"></i>
+                        <?= htmlspecialchars($j['status']) ?>
+                      </span>
+                    </td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($j['start_day']) ?></td>
+                    <td class="px-6 py-4"><?= htmlspecialchars($j['finish_day']) ?></td>
+                    <td class="px-6 py-4">
+                      <?php
+                      if (!$hasCheckIn) {
+                        $checkinLateThreshold = clone $startTime;
+                        $checkinLateThreshold->modify('+5 minutes');
 
-            <div class="main-content">
-                <h3><i class="fas fa-calendar-check me-2"></i> Jadwal Kerja Saya</h3>
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Area</th>
-                            <th>Deskripsi</th>
-                            <th>Peran</th>
-                            <th>Status</th>
-                            <th>Mulai</th>
-                            <th>Selesai</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($jadwalsaya)): ?>
-                            <?php
-                            $absenceModel = new Absence();
-                            $now = new DateTime("now", new DateTimeZone("Asia/Jakarta"));
-                            $no = 1;
-                            foreach ($jadwalsaya as $j):
-                                $hasCheckIn  = $absenceModel->hasCheckedInToday($j['id']);
-                                $hasCheckOut = $absenceModel->hasCheckedOutToday($j['id']);
+                        if ($now < $startTime) {
+                          echo '<span class="status-badge status-secondary">
+                                  <i class="fas fa-clock"></i> 
+                                  Belum Waktu Check-In
+                                </span>';
+                        } elseif ($now > $finishTime) {
+                          echo '<span class="status-badge status-danger">
+                                  <i class="fas fa-times-circle"></i> 
+                                  Lewat Waktu Check-In
+                                </span>';
+                        } elseif ($now >= $startTime && $now <= $checkinLateThreshold) {
+                          echo '<a href="index.php?action=absensi-checkin-form&work_schedule_id=' . $j['id'] . '" 
+                                  class="btn-green">
+                                  <i class="fas fa-sign-in-alt"></i> 
+                                  Check-In
+                                </a>';
+                        } else {
+                          echo '<a href="index.php?action=absensi-checkin-form&work_schedule_id=' . $j['id'] . '&late=1" 
+                                  class="btn-danger">
+                                  <i class="fas fa-exclamation-triangle"></i> 
+                                  Lewat Waktu Check-In
+                                </a>';
+                        }
+                      } elseif ($hasCheckIn && !$hasCheckOut) {
+                        if ($now < $finishTime) {
+                          echo '<span class="status-badge status-secondary">
+                                  <i class="fas fa-clock"></i> 
+                                  Belum Waktu Check-Out
+                                </span>';
+                        } elseif ($now > $finishTime->modify('+4 hours')) {
+                          echo '<span class="status-badge status-danger">
+                                  <i class="fas fa-times-circle"></i> 
+                                  Lewat Waktu Check-Out
+                                </span>';
+                        } else {
+                          echo '<a href="index.php?action=absensi-checkout-form&work_schedule_id=' . $j['id'] . '" 
+                                  class="btn-warning">
+                                  <i class="fas fa-sign-out-alt"></i> 
+                                  Check-Out
+                                </a>';
+                        }
+                      } else {
+                        echo '<span class="status-badge status-success">
+                                <i class="fas fa-check-circle"></i> 
+                                Selesai
+                              </span>';
+                      }
+                      ?>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <tr>
+                  <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                    <i class="fas fa-info-circle text-3xl text-gray-400 mb-4"></i>
+                    <p class="text-xl font-semibold">Belum Ada Jadwal Kerja</p>
+                    <p class="text-sm mt-2">Silakan tunggu jadwal kerja dari admin</p>
+                  </td>
+                </tr>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
 
-                                $startTime   = new DateTime($j['start_day'], new DateTimeZone("Asia/Jakarta"));
-                                $finishTime  = new DateTime($j['finish_day'], new DateTimeZone("Asia/Jakarta"));
-                            ?>
-                                <tr>
-                                    <td><?= $no++ ?></td>
-                                    <td><?= htmlspecialchars($j['area_name']) ?></td>
-                                    <td><?= htmlspecialchars($j['description']) ?></td>
-                                    <td><?= htmlspecialchars($j['choice_of_role']) ?></td>
-                                    <td><?= htmlspecialchars($j['status']) ?></td>
-                                    <td><?= htmlspecialchars($j['start_day']) ?></td>
-                                    <td><?= htmlspecialchars($j['finish_day']) ?></td>
-                                    <td>
-                                        <?php
-                                        if (!$hasCheckIn) {
-                                            $checkinLateThreshold = clone $startTime;
-                                            $checkinLateThreshold->modify('+5 minutes');
+  <script>
+    // Clock
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('currentTime').textContent =
+        now.toLocaleTimeString('id-ID') + ' | ' + now.toLocaleDateString('id-ID');
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
 
-                                            if ($now < $startTime) {
-                                                echo '<span class="badge bg-secondary"><i class="fas fa-clock me-1"></i> Belum Waktu Check-In</span>';
-                                            } elseif ($now > $finishTime) {
-                                                echo '<span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> Lewat Waktu Check-In (Terlalu Lama)</span>';
-                                            } elseif ($now >= $startTime && $now <= $checkinLateThreshold) {
-                                                // Check-In normal
-                                                echo '<a href="index.php?action=absensi-checkin-form&work_schedule_id=' . $j['id'] . '" class="btn btn-success btn-sm">
-                    <i class="fas fa-sign-in-alt me-1"></i> Check-In
-                  </a>';
-                                            } else {
-                                                // Lewat waktu check-in > 5 menit
-                                                echo '<a href="index.php?action=absensi-checkin-form&work_schedule_id=' . $j['id'] . '&late=1" class="btn btn-danger btn-sm">
-                    <i class="fas fa-exclamation-triangle me-1"></i> Lewat Waktu Check-In
-                  </a>';
-                                            }
-                                        } elseif ($hasCheckIn && !$hasCheckOut) {
-                                            if ($now < $finishTime) {
-                                                echo '<span class="badge bg-secondary"><i class="fas fa-clock me-1"></i> Belum Waktu Check-Out</span>';
-                                            } elseif ($now > $finishTime->modify('+4 hours')) {
-                                                echo '<span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> Lewat Waktu Check-Out</span>';
-                                            } else {
-                                                echo '<a href="index.php?action=absensi-checkout-form&work_schedule_id=' . $j['id'] . '" class="btn btn-warning btn-sm">
-                    <i class="fas fa-sign-out-alt me-1"></i> Check-Out
-                  </a>';
-                                            }
-                                        } else {
-                                            echo '<span class="badge bg-light text-dark"><i class="fas fa-check-circle me-1"></i> Selesai</span>';
-                                        }
-                                        ?>
-                                    </td>
-
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="8" class="text-center text-muted">
-                                    <i class="fas fa-info-circle me-2"></i> Belum ada jadwal kerja.
-                                </td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </main>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    // Add loading states for buttons
+    document.addEventListener('DOMContentLoaded', function() {
+      const buttons = document.querySelectorAll('a[href*="absensi"]');
+      buttons.forEach(button => {
+        button.addEventListener('click', function() {
+          const originalContent = this.innerHTML;
+          this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+          this.style.pointerEvents = 'none';
+          
+          // Restore after navigation (in case of back button)
+          setTimeout(() => {
+            this.innerHTML = originalContent;
+            this.style.pointerEvents = 'auto';
+          }, 2000);
+        });
+      });
+    });
+  </script>
 </body>
-
 </html>
