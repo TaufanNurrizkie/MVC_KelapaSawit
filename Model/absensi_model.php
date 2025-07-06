@@ -57,4 +57,17 @@ class Absence
         $this->db->bind('notes', $notes);
         return $this->db->execute();
     }
+
+    public function getScheduleById($work_schedule_id)
+    {
+        $sql = "
+        SELECT s.*
+        FROM work_schedules ws
+        JOIN schedules s ON s.id = ws.schedule_id
+        WHERE ws.id = :id
+    ";
+        $this->db->query($sql);
+        $this->db->bind('id', $work_schedule_id);
+        return $this->db->single();
+    }
 }

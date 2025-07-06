@@ -49,6 +49,7 @@ class Absensi
             echo "<h3 style='color:red'>❌ work_schedule_id belum dikirim di URL.</h3>";
             exit;
         }
+        
 
         include './View/Absensi/checkout.php';
     }
