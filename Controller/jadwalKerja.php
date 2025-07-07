@@ -118,44 +118,54 @@ class JadwalKerja
     }
 
     public function arsipkanJadwalSelesai()
-    {
-        require_once './Model/history_model.php';
-        require_once './Model/tugas_kerja.php';
-        require_once './Model/absensi_model.php';
-        require_once './Model/role_model.php';
+{
+    require_once './Model/history_model.php';
+    $history = new History();
+    $jadwalModel = new jadwal_kerja();
 
-        $history = new History();
-        $tugas = new tugas_kerja();
-        $absen = new Absensi();
-        $role = new Role();
+    // Step 1: Tandai semua jadwal selesai otomatis
+    $jadwalModel->tandaiSelesaiOtomatis();
 
-        $selesai = $this->model->getSelesaiSchedules();
+    // Step 2: Ambil semua jadwal yang statusnya selesai
+    $selesai = $jadwalModel->getSelesaiSchedules();
 
-        foreach ($selesai as $jadwal) {
-            $peserta = $tugas->getByScheduleId($jadwal['id']);
+    foreach ($selesai as $s) {
+        // Cek apakah sudah pernah diarsipkan
+        if ($history->isArchived($s['id'])) continue;
 
-            foreach ($peserta as $p) {
-                $hadir = $absen->hitungHadir($p['id']);
-                $gaji = $role->getByName($p['choice_of_role']);
-                $gajiHarian = $gaji ? $gaji['daily_wage'] : 0;
+        // Ambil data work_schedules (penempatan kerja)
+        $db = new Database7();
+        $db->query("SELECT * FROM work_schedules WHERE schedule_id = :sid");
+        $db->bind('sid', $s['id']);
+        $workers = $db->resultSet();
 
-                $data = [
-                    'user_id' => $p['employee_id'],
-                    'schedule_id' => $jadwal['id'],
-                    'absensi' => $hadir,
-                    'notes' => $jadwal['description'],
-                    'salary' => $hadir * $gajiHarian
-                ];
+        foreach ($workers as $w) {
+            // Ambil absensi
+            $db->query("SELECT type, notes FROM absences WHERE work_schedule_id = :wid");
+            $db->bind('wid', $w['id']);
+            $absen = $db->single();
 
-                $history->simpanRiwayat($data);
-            }
+            $absensi = $absen['type'] ?? 'tidak hadir';
+            $notes = $absen['notes'] ?? '';
 
-            // Opsional: tandai sudah diproses atau hapus
-            // $this->model->delete($jadwal['id']); 
-            // atau update status:
-            // $this->model->markArchived($jadwal['id']);
+            // Ambil total gaji dari wages
+            $db->query("SELECT total_wage FROM wages WHERE user_id = :uid ORDER BY created_at DESC LIMIT 1");
+            $db->bind('uid', $w['employee_id']);
+            $wage = $db->single();
+            $totalWage = $wage['total_wage'] ?? 0;
+
+            // Simpan ke history
+            $history->insert([
+                'user_id' => $w['employee_id'],
+                'schedule_id' => $s['id'],
+                'absensi' => $absensi,
+                'description' => $notes,
+                'total_wage' => $totalWage
+            ]);
         }
-
-        echo "<script>alert('Berhasil memindahkan semua jadwal selesai ke riwayat.'); window.location='index.php?action=riwayat';</script>";
     }
+
+    header("Location: index.php?action=riwayat");
+}
+
 }

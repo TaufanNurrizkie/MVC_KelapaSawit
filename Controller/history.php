@@ -1,24 +1,47 @@
 <?php
 require_once './Model/history_model.php';
+require_once './Model/gaji_model.php';
 
-class HistoryController
+class RiwayatController
 {
     private $model;
+    private $gajiModel;
 
     public function __construct()
     {
-        if (session_status() === PHP_SESSION_NONE) session_start();
         $this->model = new History();
+        $this->gajiModel = new Gaji();
     }
 
-    // Admin: Lihat semua riwayat
     public function index()
     {
         $riwayats = $this->model->getAll();
         include './View/History/index.php';
     }
 
-    // Karyawan: Lihat riwayat sendiri
+    public function arsipkan($work_schedule_id)
+    {
+        // Hitung kehadiran
+        $this->gajiModel->generateBySchedule($_GET['user_id'], $work_schedule_id);
+
+        // Simpan ke history
+        $data = [
+            'user_id' => $_GET['user_id'],
+            'schedule_id' => $_GET['schedule_id'],
+            'work_schedule_id' => $work_schedule_id,
+            'days_worked' => $_GET['days_worked'],
+            'total_wage' => $_GET['total_wage'],
+            'description' => $_GET['description'] ?? '-'
+        ];
+        $this->model->insert($data);
+
+        // Optional: hapus absensi
+        $this->model->clearRelatedData($work_schedule_id);
+
+        header("Location: index.php?action=riwayat");
+        exit;
+    }
+
     public function riwayatSaya()
     {
         if (!isset($_SESSION['user'])) {
@@ -26,8 +49,12 @@ class HistoryController
             exit;
         }
 
-        $user_id = $_SESSION['user']['id'];
-        $riwayats = $this->model->getByUser($user_id);
-        include './View/History/user.php';
+        $userId = $_SESSION['user']['id'];
+        require_once './Model/history_model.php';
+        $history = new History();
+
+        $riwayats = $history->getByUser($userId);
+
+        include './View/History/riwayat_saya.php';
     }
 }

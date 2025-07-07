@@ -20,7 +20,7 @@ require_once './Controller/Role.php';
 require_once './Controller/gaji.php';
 require_once './Controller/history.php';
 
-$history = new HistoryController();
+$history = new RiwayatController();
 $gaji = new GajiController();
 $role = new Role();
 $karyawan = new Karyawan();
@@ -141,6 +141,15 @@ if (isset($_GET['action'])) {
         case 'karyawan':
             $karyawan->index();
             break;
+        case 'karyawan-create':
+            $karyawan->register2();
+            break;
+        case 'karyawan-edit':
+            $karyawan->editKaryawan();
+            break;
+        case 'karyawan-delete':
+            $karyawan->deleteKaryawan();
+            break;
 
         // Profil
         case 'profile':
@@ -154,17 +163,20 @@ if (isset($_GET['action'])) {
         case 'gaji':
             $gaji->index();
             break;
+
         case 'gaji-bayar':
             $gaji->tandaiDibayar();
             break;
+
         case 'gaji-saya':
             $gaji->lihatGajiSaya();
             break;
+
         case 'gaji-tarik':
             $gaji->ajukanPenarikan();
             break;
+
         case 'gaji-generate-all':
-            $gaji = new GajiController();
             $gaji->generateAll();
             break;
 
@@ -176,6 +188,11 @@ if (isset($_GET['action'])) {
         case 'riwayat-saya':
             $history->riwayatSaya();
             break;
+
+        case 'jadwal-arsipkan':
+            $jadwal->arsipkanJadwalSelesai();
+            break;
+
 
         default:
             echo "<h3 style='color:red'>❌ Aksi tidak dikenali!</h3>";

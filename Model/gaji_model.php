@@ -86,27 +86,56 @@ class Gaji
     }
 
     public function generateAll()
-{
-    // Ambil semua user yang punya absensi check-in
-    $this->db->query("
-        SELECT DISTINCT ws.employee_id AS user_id
+    {
+        // Ambil semua kombinasi user + work_schedule yang ada absensinya (dan belum digaji)
+        $this->db->query("
+        SELECT DISTINCT ws.employee_id AS user_id, ws.id AS work_schedule_id
         FROM work_schedules ws
         JOIN absences a ON a.work_schedule_id = ws.id
         WHERE a.type = 'check-in'
+        AND ws.id NOT IN (SELECT work_schedule_id FROM wages WHERE work_schedule_id IS NOT NULL)
     ");
-    $userList = $this->db->resultSet();
+        $list = $this->db->resultSet();
 
-    foreach ($userList as $user) {
-        $user_id = $user['user_id'];
-
-        // Cek apakah sudah ada gaji sebelumnya
-        $this->db->query("SELECT id FROM wages WHERE user_id = :uid");
-        $this->db->bind('uid', $user_id);
-        if ($this->db->single()) continue; // sudah ada, skip
-
-        // Panggil fungsi generate()
-        $this->generate($user_id);
+        foreach ($list as $item) {
+            $this->generateBySchedule($item['user_id'], $item['work_schedule_id']);
+        }
     }
+
+    public function generateBySchedule($user_id, $schedule_id)
+{
+    // Hitung jumlah hari kerja dari absences check-in
+    $this->db->query("SELECT COUNT(*) AS total FROM absences 
+                      WHERE work_schedule_id = :sid AND type = 'check-in'");
+    $this->db->bind('sid', $schedule_id);
+    $result = $this->db->single();
+    $hari = $result['total'] ?? 0;
+
+    // Ambil choice_of_role dari work_schedule
+    $this->db->query("SELECT choice_of_role FROM work_schedules WHERE id = :sid");
+    $this->db->bind('sid', $schedule_id);
+    $row = $this->db->single();
+    if (!$row) return false;
+    $roleName = $row['choice_of_role'];
+
+    // Ambil info role
+    $this->db->query("SELECT id, daily_wage FROM roles WHERE name = :name");
+    $this->db->bind('name', $roleName);
+    $roleData = $this->db->single();
+    if (!$roleData) return false;
+
+    $total = $hari * $roleData['daily_wage'];
+
+    // Simpan ke wages
+    $this->db->query("INSERT INTO wages (user_id, role_id, days_worked, total_wage, work_schedule_id)
+                      VALUES (:uid, :rid, :days, :total, :sid)");
+    $this->db->bind('uid', $user_id);
+    $this->db->bind('rid', $roleData['id']);
+    $this->db->bind('days', $hari);
+    $this->db->bind('total', $total);
+    $this->db->bind('sid', $schedule_id);
+
+    return $this->db->execute();
 }
 
 }
