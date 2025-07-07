@@ -70,10 +70,20 @@ class jadwal_kerja
 
     public function delete($id)
     {
-        $this->db->query("DELETE FROM {$this->table} WHERE id = :id");
+        // Cek apakah ada pengajuan yang terkait
+        $this->db->query("SELECT COUNT(*) as total FROM applications WHERE schedule_id = :id");
+        $this->db->bind('id', $id);
+        $check = $this->db->single();
+
+        if ($check['total'] > 0) {
+            return false; // Tidak bisa dihapus
+        }
+
+        $this->db->query("DELETE FROM $this->table WHERE id = :id");
         $this->db->bind('id', $id);
         return $this->db->execute();
     }
+
 
     public function getAllAreas()
     {
